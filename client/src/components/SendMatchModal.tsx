@@ -1,4 +1,6 @@
-interface SendMatchModalProps {
+import { Customer, Match } from "../types";
+
+export interface SendMatchModalProps {
   isOpen: boolean;
   onClose: () => void;
   customer: Customer;

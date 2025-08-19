@@ -2,6 +2,143 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base styles */
 body {
   @apply bg-background text-secondary;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+/* Responsive utilities */
+@layer utilities {
+  .text-responsive {
+    @apply text-sm sm:text-base;
+  }
+  
+  .heading-responsive {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+  
+  .container-responsive {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .card-responsive {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+  
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+  }
+  
+  .space-responsive {
+    @apply space-y-4 sm:space-y-6;
+  }
+}
+
+/* Animation classes */
+@layer components {
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .slide-in-bottom {
+    animation: slideInBottom 0.3s ease-out;
+  }
+  
+  .pulse-gentle {
+    animation: pulseGentle 2s infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseGentle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Focus styles for accessibility */
+.focus-visible {
+  @apply outline-none ring-2 ring-primary ring-offset-2;
+}
+
+/* Touch-friendly buttons for mobile */
+@media (hover: none) and (pointer: coarse) {
+  button, .cursor-pointer {
+    @apply active:scale-95 transition-transform duration-150;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    @apply bg-white text-black;
+  }
+  
+  .shadow-lg, .shadow-md, .shadow-sm {
+    box-shadow: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .bg-gray-50 {
+    @apply bg-gray-100;
+  }
+  
+  .border-gray-200 {
+    @apply border-gray-400;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

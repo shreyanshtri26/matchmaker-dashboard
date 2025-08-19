@@ -6,7 +6,7 @@ import CustomerDetail from './components/CustomerDetail';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const token = localStorage.getItem('token');
-  return token ? <>{children}</> : <Navigate to="/" />;
+  return token ? <>{children}</> : <Navigate to="/" replace />;
 };
 
 const App: React.FC = () => {

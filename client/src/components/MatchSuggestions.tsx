@@ -53,30 +53,35 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, onSendMatch }) => {
   const matchLevel = getMatchLevel(match.explanation);
 
   return (
-    <div className="border-2 border-gray-200 rounded-xl p-6 mb-6 shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
+    <div className="border-2 border-gray-200 rounded-xl p-4 sm:p-6 mb-6 shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
       {/* Header with Name, AI Badge, and Score */}
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center space-x-3">
-          <div>
-            <h3 className="text-xl font-bold text-gray-800">{match.name}</h3>
-            <div className="flex items-center space-x-2 mt-1">
-              <span className="text-sm text-gray-600">{match.age} years • {match.city}</span>
-              <span className="text-sm text-gray-500">• {match.designation}</span>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-3">
+        <div className="flex-1">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3">
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-gray-800">{match.name}</h3>
+              <div className="flex flex-wrap items-center gap-2 mt-1 text-sm text-gray-600">
+                <span>{match.age} years</span>
+                <span>•</span>
+                <span>{match.city}</span>
+                <span className="hidden sm:inline">•</span>
+                <span className="sm:inline">{match.designation}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2 mt-2 sm:mt-0">
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getMatchBadge(matchLevel)}`}>
+                🤖 {getMatchLevelText(matchLevel)}
+              </span>
+              <div className={`px-3 py-2 rounded-xl text-lg font-bold border-2 ${getScoreColor(match.score)}`}>
+                {match.score}%
+              </div>
             </div>
           </div>
-          <div className="flex flex-col space-y-1">
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getMatchBadge(matchLevel)}`}>
-              🤖 {getMatchLevelText(matchLevel)}
-            </span>
-          </div>
-        </div>
-        <div className={`px-4 py-2 rounded-xl text-lg font-bold border-2 ${getScoreColor(match.score)}`}>
-          {match.score}%
         </div>
       </div>
 
       {/* Quick Profile Info */}
-      <div className="grid grid-cols-2 gap-4 mb-4 p-4 bg-gray-50 rounded-lg">
+      <div className="grid grid-cols-2 gap-4 mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
         <div className="text-sm">
           <span className="font-semibold text-gray-700">Height:</span>
           <span className="ml-2 text-gray-600">{match.height} cm</span>
@@ -88,13 +93,13 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, onSendMatch }) => {
       </div>
 
       {/* AI Explanation Section */}
-      <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-blue-400">
+      <div className="mb-4 p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-blue-400">
         <div className="flex items-start space-x-3">
-          <span className="text-2xl mt-1">🧠</span>
+          <span className="text-xl sm:text-2xl mt-1">🧠</span>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+            <p className="text-sm font-semibold text-gray-800 mb-2 flex flex-wrap items-center gap-2">
               AI Compatibility Analysis
-              <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+              <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
                 Powered by Gemini
               </span>
             </p>
@@ -104,9 +109,9 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, onSendMatch }) => {
       </div>
 
       {/* AI Generated Introduction Preview */}
-      <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-l-4 border-purple-400">
+      <div className="mb-6 p-3 sm:p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-l-4 border-purple-400">
         <div className="flex items-start space-x-3">
-          <span className="text-2xl mt-1">✍️</span>
+          <span className="text-xl sm:text-2xl mt-1">✍️</span>
           <div className="flex-1">
             <p className="text-sm font-semibold text-gray-800 mb-2">AI-Generated Introduction</p>
             <p className="text-sm text-gray-700 italic leading-relaxed">"{match.intro}"</p>
@@ -118,7 +123,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, onSendMatch }) => {
       <div className="flex justify-end">
         <Button 
           onClick={() => onSendMatch(match)}
-          className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 flex items-center space-x-2"
+          className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
         >
           <span>📧</span>
           <span>Send Match</span>
@@ -147,14 +152,14 @@ const SendMatchModal: React.FC<SendMatchModalProps> = ({ isOpen, onClose, custom
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="p-4 sm:p-6">
           {/* Modal Header */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Send Match Proposal</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Send Match Proposal</h2>
             <button 
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              className="text-gray-500 hover:text-gray-700 text-2xl font-bold p-2"
             >
               ×
             </button>
@@ -163,7 +168,7 @@ const SendMatchModal: React.FC<SendMatchModalProps> = ({ isOpen, onClose, custom
           {/* Match Summary */}
           <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
             <h3 className="font-bold text-lg mb-2">Match Summary</h3>
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <div><span className="font-semibold">To:</span> {customer.firstName} {customer.lastName}</div>
               <div><span className="font-semibold">Match:</span> {match.name}</div>
               <div><span className="font-semibold">Compatibility Score:</span> {match.score}%</div>
@@ -177,7 +182,7 @@ const SendMatchModal: React.FC<SendMatchModalProps> = ({ isOpen, onClose, custom
               <span className="mr-2">✍️</span>
               AI-Generated Introduction Email
             </h3>
-            <div className="bg-white p-4 rounded border italic text-gray-700">
+            <div className="bg-white p-4 rounded border italic text-gray-700 max-h-32 overflow-y-auto">
               {match.intro}
             </div>
           </div>
@@ -185,27 +190,27 @@ const SendMatchModal: React.FC<SendMatchModalProps> = ({ isOpen, onClose, custom
           {/* Match Profile Details */}
           <div className="mb-6 p-4 bg-gray-50 rounded-lg">
             <h3 className="font-bold text-lg mb-3">Profile Details</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
               <div><span className="font-semibold">Age:</span> {match.age} years</div>
               <div><span className="font-semibold">City:</span> {match.city}</div>
               <div><span className="font-semibold">Profession:</span> {match.designation}</div>
               <div><span className="font-semibold">Height:</span> {match.height} cm</div>
-              <div><span className="font-semibold">Income:</span> ₹{(match.income / 100000).toFixed(1)}L/year</div>
+              <div className="sm:col-span-2"><span className="font-semibold">Income:</span> ₹{(match.income / 100000).toFixed(1)}L/year</div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-3">
+          <div className="flex flex-col sm:flex-row justify-end gap-3">
             <Button 
               onClick={onClose}
               variant="secondary"
-              className="px-6 py-2"
+              className="w-full sm:w-auto px-6 py-2"
             >
               Cancel
             </Button>
             <Button 
               onClick={handleSend}
-              className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6 py-2 flex items-center space-x-2"
+              className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6 py-2 flex items-center justify-center space-x-2"
             >
               <span>📧</span>
               <span>Send Introduction</span>
@@ -256,11 +261,11 @@ const MatchSuggestions: React.FC<Props> = ({ customer }) => {
   // Loading State
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-12">
+      <div className="flex items-center justify-center p-8 sm:p-12">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mx-auto mb-4"></div>
           <p className="text-lg text-gray-600 mb-2">🤖 AI is analyzing potential matches...</p>
-          <p className="text-sm text-gray-500">Evaluating compatibility across 100+ profiles</p>
+          <p className="text-sm text-gray-500 px-4">Evaluating compatibility across 100+ profiles</p>
         </div>
       </div>
     );
@@ -270,65 +275,65 @@ const MatchSuggestions: React.FC<Props> = ({ customer }) => {
     <div className="mt-8">
       {/* Enhanced Header */}
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <h2 className="text-3xl font-bold text-gray-800">AI-Powered Match Suggestions</h2>
-            <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">AI-Powered Match Suggestions</h2>
+            <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold w-fit mt-2 sm:mt-0">
               🚀 Powered by Google Gemini AI
             </span>
           </div>
         </div>
         
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-6 text-sm sm:text-base">
           Advanced AI matching for <span className="font-semibold">{customer.firstName} {customer.lastName}</span> 
           using gender-specific compatibility algorithms
         </p>
 
         {/* Enhanced Statistics Dashboard */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-3 sm:p-4 rounded-xl border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-blue-700">{matches.length}</p>
-                <p className="text-sm text-blue-600 font-medium">Total AI Matches</p>
+                <p className="text-2xl sm:text-3xl font-bold text-blue-700">{matches.length}</p>
+                <p className="text-xs sm:text-sm text-blue-600 font-medium">Total AI Matches</p>
               </div>
-              <span className="text-3xl">🎯</span>
+              <span className="text-2xl sm:text-3xl">🎯</span>
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
+          <div className="bg-gradient-to-r from-green-50 to-green-100 p-3 sm:p-4 rounded-xl border border-green-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-green-700">
+                <p className="text-2xl sm:text-3xl font-bold text-green-700">
                   {matches.filter(m => m.score >= 80).length}
                 </p>
-                <p className="text-sm text-green-600 font-medium">High Potential</p>
+                <p className="text-xs sm:text-sm text-green-600 font-medium">High Potential</p>
               </div>
-              <span className="text-3xl">⭐</span>
+              <span className="text-2xl sm:text-3xl">⭐</span>
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
+          <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-3 sm:p-4 rounded-xl border border-purple-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-purple-700">
+                <p className="text-2xl sm:text-3xl font-bold text-purple-700">
                   {matches.length > 0 ? Math.round(matches.reduce((acc, m) => acc + m.score, 0) / matches.length) : 0}%
                 </p>
-                <p className="text-sm text-purple-600 font-medium">Avg Score</p>
+                <p className="text-xs sm:text-sm text-purple-600 font-medium">Avg Score</p>
               </div>
-              <span className="text-3xl">📊</span>
+              <span className="text-2xl sm:text-3xl">📊</span>
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-xl border border-orange-200">
+          <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-3 sm:p-4 rounded-xl border border-orange-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-orange-700">
+                <p className="text-2xl sm:text-3xl font-bold text-orange-700">
                   {matches.filter(m => m.score >= 65).length}
                 </p>
-                <p className="text-sm text-orange-600 font-medium">Good+ Matches</p>
+                <p className="text-xs sm:text-sm text-orange-600 font-medium">Good+ Matches</p>
               </div>
-              <span className="text-3xl">💝</span>
+              <span className="text-2xl sm:text-3xl">💝</span>
             </div>
           </div>
         </div>
@@ -337,14 +342,14 @@ const MatchSuggestions: React.FC<Props> = ({ customer }) => {
       {/* Match Results */}
       <div>
         {matches.length === 0 ? (
-          <div className="text-center p-12 bg-gray-50 rounded-xl">
-            <span className="text-6xl mb-4 block">🔍</span>
-            <p className="text-xl text-gray-600 mb-2">No compatible matches found</p>
-            <p className="text-gray-500">Try adjusting search criteria or check back later for new profiles.</p>
+          <div className="text-center p-8 sm:p-12 bg-gray-50 rounded-xl">
+            <span className="text-4xl sm:text-6xl mb-4 block">🔍</span>
+            <p className="text-lg sm:text-xl text-gray-600 mb-2">No compatible matches found</p>
+            <p className="text-sm sm:text-base text-gray-500 px-4">Try adjusting search criteria or check back later for new profiles.</p>
           </div>
         ) : (
           <div className="space-y-6">
-            <h3 className="text-xl font-bold text-gray-700 mb-4">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-700 mb-4">
               Recommended Matches (Sorted by AI Compatibility Score)
             </h3>
             {matches.map((match) => (

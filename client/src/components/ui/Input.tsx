@@ -1,13 +1,35 @@
 import React, { InputHTMLAttributes } from 'react';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  error?: boolean;
+  helperText?: string;
+}
 
-const Input: React.FC<InputProps> = ({ className = '', ...props }) => {
+const Input: React.FC<InputProps> = ({ 
+  className = '', 
+  error = false,
+  helperText,
+  disabled,
+  ...props 
+}) => {
+  const baseStyles = 'w-full px-3 py-2 border rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
+  const errorStyles = error 
+    ? 'border-red-300 focus:border-red-500 focus:ring-red-500' 
+    : 'border-gray-300 focus:border-primary focus:ring-primary';
+
   return (
-    <input
-      className={`px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 ${className}`}
-      {...props}
-    />
+    <div className="w-full">
+      <input
+        className={`${baseStyles} ${errorStyles} ${className}`}
+        disabled={disabled}
+        {...props}
+      />
+      {helperText && (
+        <p className={`mt-1 text-sm ${error ? 'text-red-600' : 'text-gray-500'}`}>
+          {helperText}
+        </p>
+      )}
+    </div>
   );
 };
 
