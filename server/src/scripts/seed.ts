@@ -108,11 +108,11 @@ const seedData = async () => {
     };
 
     // 5 male non-dummy
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 35; i++) {
       customers.push(generateCustomer('Male', false));
     }
     // 5 female non-dummy
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 35; i++) {
       customers.push(generateCustomer('Female', false));
     }
     // 50 male dummy

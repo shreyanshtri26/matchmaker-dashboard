@@ -34,7 +34,7 @@ const CustomerDetail: React.FC = () => {
         <p><strong>Phone:</strong> {customer.phone}</p>
         <p><strong>Undergraduate College:</strong> {customer.college}</p>
         <p><strong>Degree:</strong> {customer.degree}</p>
-        <p><strong>Income:</strong> ${customer.income}</p>
+        <p><strong>Income(Per Annum):</strong> Rs {customer.income}</p>
         <p><strong>Current Company:</strong> {customer.company}</p>
         <p><strong>Designation:</strong> {customer.designation}</p>
         <p><strong>Marital Status:</strong> {customer.maritalStatus}</p>

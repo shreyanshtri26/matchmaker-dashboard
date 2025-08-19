@@ -4,13 +4,15 @@ import cors from 'cors';
 import customerRoutes from './routes/customerRoutes';
 import matchRoutes from './routes/matchRoutes';
 import authRoutes from './routes/authRoutes';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
 app.use(cors({ origin: process.env.FRONTEND_URL || '*' })); // Set FRONTEND_URL in env to Vercel URL
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/matchmaker')
+mongoose.connect(process.env.MONGO_URI ||'')
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error(err));
 
