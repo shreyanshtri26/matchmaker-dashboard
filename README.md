@@ -17,6 +17,15 @@ This is an internal tool for TDC matchmakers to manage clients, view profiles, a
    - Create `.env` with `VITE_API_BASE=http://localhost:5000/api`
    - `npm run dev` to start (port 5173)
 
+
+##  Match Level Classification:
+
+`High Potential Match (80-100): Green gradient badge`
+`Good Compatibility (65-79): Blue gradient badge ` 
+`Average Match (50-64): Yellow gradient badge`
+`Limited Compatibility (<50): Gray gradient badge`
+
+
 ## Deployment
 ### Backend on Render
 1. Create a new Web Service on Render, connect GitHub repo (server folder).
@@ -25,6 +34,8 @@ This is an internal tool for TDC matchmakers to manage clients, view profiles, a
 4. Start Command: `npm start`
 5. Add Env Vars: `MONGO_URI` (use MongoDB Atlas), `GEMINI_API_KEY`, `JWT_SECRET`, `FRONTEND_URL` (your Vercel URL).
 6. Deploy. Note: Run seed locally or add a one-time endpoint.
+
+
 
 ### Frontend on Vercel
 1. Create a new project on Vercel, import GitHub repo (client folder).

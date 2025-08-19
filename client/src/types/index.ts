@@ -30,7 +30,25 @@ export interface Customer {
 export interface Match {
   id: string;
   name: string;
+  age: number;
+  city: string;
+  designation: string;
+  height: number;
+  income: number;
   score: number;
   explanation: string;
   intro: string;
+  profileDetails?: {
+    email: string;
+    phone: string;
+    college: string;
+    degree: string;
+    company: string;
+    maritalStatus: string;
+    languages: string[];
+    religion: string;
+    wantKids: 'Yes' | 'No' | 'Maybe';
+    openToRelocate: 'Yes' | 'No' | 'Maybe';
+    openToPets: 'Yes' | 'No' | 'Maybe';
+  };
 }
