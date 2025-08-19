@@ -1,94 +1,54 @@
 import React, { ReactNode } from 'react';
-import { Box, Typography, Button, BoxProps, useTheme, useMediaQuery } from '@mui/material';
 
-interface PageHeaderProps extends BoxProps {
+interface PageHeaderProps {
   title: string;
   subtitle?: string;
   action?: ReactNode;
-  titleVariant?: 'h4' | 'h5' | 'h6';
-  subtitleVariant?: 'subtitle1' | 'subtitle2' | 'body1' | 'body2';
+  titleSize?: 'sm' | 'md' | 'lg' | 'xl';
   divider?: boolean;
+  className?: string;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   subtitle,
   action,
-  titleVariant = 'h4',
-  subtitleVariant = 'subtitle1',
+  titleSize = 'lg',
   divider = true,
-  sx = {},
-  ...props
+  className = '',
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const titleSizeClasses = {
+    sm: 'text-xl sm:text-2xl',
+    md: 'text-2xl sm:text-3xl',
+    lg: 'text-3xl sm:text-4xl',
+    xl: 'text-4xl sm:text-5xl',
+  };
 
   return (
-    <Box 
-      sx={{ 
-        mb: 4,
-        ...sx,
-      }}
-      {...props}
-    >
-      <Box 
-        display="flex" 
-        flexDirection={isMobile ? 'column' : 'row'} 
-        alignItems={isMobile ? 'flex-start' : 'center'}
-        justifyContent="space-between"
-        gap={2}
-        mb={2}
-      >
-        <Box>
-          <Typography 
-            variant={titleVariant} 
-            component="h1" 
-            fontWeight={600}
-            gutterBottom={!subtitle}
-          >
+    <div className={`mb-6 sm:mb-8 ${className}`}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex-1">
+          <h1 className={`font-semibold text-gray-900 ${titleSizeClasses[titleSize]} ${subtitle ? 'mb-2' : ''}`}>
             {title}
-          </Typography>
+          </h1>
           {subtitle && (
-            <Typography 
-              variant={subtitleVariant} 
-              color="text.secondary"
-              sx={{ 
-                mt: isMobile ? 0.5 : 0,
-                maxWidth: 800,
-                lineHeight: 1.5,
-              }}
-            >
+            <p className="text-gray-600 leading-relaxed max-w-3xl">
               {subtitle}
-            </Typography>
+            </p>
           )}
-        </Box>
+        </div>
         
         {action && (
-          <Box 
-            sx={{ 
-              mt: isMobile ? 1 : 0,
-              width: isMobile ? '100%' : 'auto',
-              '& .MuiButton-root': {
-                width: isMobile ? '100%' : 'auto',
-              },
-            }}
-          >
+          <div className="flex-shrink-0 w-full sm:w-auto">
             {action}
-          </Box>
+          </div>
         )}
-      </Box>
+      </div>
       
       {divider && (
-        <Box 
-          sx={{ 
-            height: 1, 
-            bgcolor: 'divider',
-            mt: 2,
-            mb: 3,
-          }} 
-        />
+        <div className="mt-6 border-b border-gray-200" />
       )}
-    </Box>
+    </div>
   );
 };
 

@@ -1,7 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { CircularProgress, Box, Typography } from '@mui/material';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -9,6 +8,7 @@ interface ProtectedRouteProps {
   requiredPermissions?: string[];
   redirectTo?: string;
   showLoading?: boolean;
+  redirectIfAuthenticated?: boolean;
 }
 
 /**
@@ -21,9 +21,15 @@ const ProtectedRoute = ({
   requiredPermissions = [],
   redirectTo = '/login',
   showLoading = true,
+  redirectIfAuthenticated = false,
 }: ProtectedRouteProps) => {
   const { isAuthenticated, isLoading, user, hasRole, hasAnyRole } = useAuth();
   const location = useLocation();
+
+  // If redirectIfAuthenticated is true and user is authenticated, redirect to dashboard
+  if (redirectIfAuthenticated && isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   // Check if user has the required role
   const hasRequiredRole = () => {
@@ -46,23 +52,17 @@ const ProtectedRoute = ({
   // If still loading, show loading indicator
   if (isLoading && showLoading) {
     return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="80vh"
-      >
-        <CircularProgress />
-        <Typography variant="body1" sx={{ mt: 2 }}>
+      <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <p className="mt-4 text-gray-600">
           Verifying your credentials...
-        </Typography>
-      </Box>
+        </p>
+      </div>
     );
   }
 
   // If not authenticated, redirect to login with return URL
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !redirectIfAuthenticated) {
     return (
       <Navigate
         to={redirectTo}
@@ -76,23 +76,18 @@ const ProtectedRoute = ({
   const authorized = hasRequiredRole() && hasRequiredPermissions();
 
   // If not authorized, show unauthorized message or redirect
-  if (!authorized) {
+  if (!authorized && isAuthenticated) {
     return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="80vh"
-        p={3}
-      >
-        <Typography variant="h4" color="error" gutterBottom>
-          Access Denied
-        </Typography>
-        <Typography variant="body1" align="center" sx={{ maxWidth: 600 }}>
-          You don't have permission to access this page. Please contact an administrator if you believe this is an error.
-        </Typography>
-      </Box>
+      <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-gray-50">
+        <div className="text-center max-w-md">
+          <h1 className="text-4xl font-bold text-red-600 mb-4">
+            Access Denied
+          </h1>
+          <p className="text-gray-700 leading-relaxed">
+            You don't have permission to access this page. Please contact an administrator if you believe this is an error.
+          </p>
+        </div>
+      </div>
     );
   }
 

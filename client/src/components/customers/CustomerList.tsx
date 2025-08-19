@@ -1,19 +1,7 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  TablePagination,
-  Box,
-  Typography,
-  CircularProgress,
-  Alert,
-  Button
-} from '@mui/material';
+import React from 'react';
 import { Customer } from '../../types';
+import Button from '../ui/Button';
+import CustomerStatusChip from './CustomerStatusChip';
 
 interface CustomerListProps {
   customers: Customer[];
@@ -38,74 +26,139 @@ export default function CustomerList({
   onRowsPerPageChange,
   onViewDetails,
 }: CustomerListProps) {
+  const totalPages = Math.ceil(totalCount / rowsPerPage);
+
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress />
-      </Box>
+      <div className="flex justify-center p-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Alert severity="error" sx={{ m: 2 }}>
-        Error loading customers: {error}
-      </Alert>
+      <div className="m-4 p-4 bg-red-50 border border-red-200 rounded-md">
+        <div className="text-red-800">
+          Error loading customers: {error}
+        </div>
+      </div>
     );
   }
 
   if (customers.length === 0) {
     return (
-      <Box p={4} textAlign="center">
-        <Typography variant="h6">No customers found</Typography>
-      </Box>
+      <div className="p-8 text-center">
+        <h3 className="text-lg font-medium text-gray-900">No customers found</h3>
+      </div>
     );
   }
 
   return (
-    <Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {customers.map((customer) => (
-              <TableRow key={customer.id}>
-                <TableCell>{customer.name}</TableCell>
-                <TableCell>{customer.email}</TableCell>
-                <TableCell>{customer.phone}</TableCell>
-                <TableCell>{customer.status}</TableCell>
-                <TableCell>
-                  <Button 
-                    variant="outlined" 
-                    size="small"
-                    onClick={() => onViewDetails(customer.id)}
-                  >
-                    View Details
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={totalCount}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={(_, newPage) => onPageChange(newPage)}
-        onRowsPerPageChange={(e) => onRowsPerPageChange(parseInt(e.target.value, 10))}
-      />
-    </Box>
+    <div className="space-y-4">
+      {/* Table Container */}
+      <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Phone
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {customers.map((customer) => (
+                <tr key={customer.id} className="hover:bg-gray-50">
+                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {customer.name}
+                    </div>
+                  </td>
+                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-500 truncate max-w-32 sm:max-w-none">
+                      {customer.email}
+                    </div>
+                  </td>
+                  <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-500">
+                      {customer.phone}
+                    </div>
+                  </td>
+                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                    <CustomerStatusChip status={customer.status} />
+                  </td>
+                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => onViewDetails(customer.id)}
+                    >
+                      View Details
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Pagination */}
+      <div className="bg-white px-4 py-3 border border-gray-200 rounded-lg sm:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-700">
+              Rows per page:
+            </span>
+            <select
+              value={rowsPerPage}
+              onChange={(e) => onRowsPerPageChange(parseInt(e.target.value, 10))}
+              className="border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+            </select>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <span className="text-sm text-gray-700">
+              {(page * rowsPerPage) + 1}-{Math.min((page + 1) * rowsPerPage, totalCount)} of {totalCount}
+            </span>
+            <div className="flex gap-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onPageChange(page - 1)}
+                disabled={page === 0}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onPageChange(page + 1)}
+                disabled={page >= totalPages - 1}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
