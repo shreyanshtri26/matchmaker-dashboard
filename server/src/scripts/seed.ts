@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import User from '../models/User';
 import Customer from '../models/Customer';
-import { connectDB } from './database';
+import { connectDB } from '../database';
 
 dotenv.config();
 
@@ -38,9 +38,11 @@ const cities = [
 
 const maritalStatuses = ['Single', 'Divorced', 'Widowed'];
 const yesNoMaybe = ['Yes', 'No', 'Maybe'];
+const castes = ['General', 'OBC', 'SC', 'ST'];
+const religions = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Jain', 'Buddhist', 'Other'];
 
 // Helper for random pick
-const randomElement = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+const randomElement = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
 
 const seedData = async () => {
   await connectDB();
@@ -58,10 +60,11 @@ const seedData = async () => {
     });
     await user.save();
 
-    // Create 100 realistic dummy profiles with equal gender distribution
+    // Create 10 non-dummy customers (5 male, 5 female) and 100 dummy profiles (50 male, 50 female)
     const customers = [];
-    for (let i = 0; i < 100; i++) {
-      const gender = i < 50 ? 'Male' : 'Female';  // First 50 will be Male, next 50 will be Female
+
+    // Function to generate a customer
+    const generateCustomer = (gender: 'Male' | 'Female', isDummy: boolean) => {
       const firstName = gender === 'Male' ? randomElement(firstNamesMale) : randomElement(firstNamesFemale);
       const lastName = randomElement(lastNames);
       const city = randomElement(cities);
@@ -72,36 +75,53 @@ const seedData = async () => {
         Math.floor(Math.random() * 12),        // month
         Math.floor(Math.random() * 28) + 1     // day
       );
+      const dob = dateOfBirth.toISOString().split('T')[0];
+      const age = new Date().getFullYear() - dateOfBirth.getFullYear();
 
-      const customer = new Customer({
+      return new Customer({
         firstName,
         lastName,
         gender,
-        dateOfBirth,
+        dob,
+        age,
         city,
         country: 'India',
         maritalStatus,
-        smoking: randomElement(yesNoMaybe),
-        drinking: randomElement(yesNoMaybe),
         email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`,
-        phoneNumber: `9${Math.floor(100000000 + Math.random() * 900000000)}`,
+        phone: `9${Math.floor(100000000 + Math.random() * 900000000)}`,
         height: Math.floor(150 + Math.random() * 40), // 150-190 cm
-        undergraduateCollege: `University of ${city}`,
-        degree: 'Bachelor of ' + ['Science', 'Arts', 'Commerce', 'Engineering', 'Business Administration'][Math.floor(Math.random() * 5)],
+        college: `University of ${city}`,
+        degree: 'Bachelor of ' + randomElement(['Science', 'Arts', 'Commerce', 'Engineering', 'Business Administration']),
         income: Math.floor(500000 + Math.random() * 1000000), // 5L to 15L
-        currentCompany: `${city} ${['Tech', 'Solutions', 'Enterprises', 'Industries', 'Group'][Math.floor(Math.random() * 5)]}`,
-        designation: ['Software Engineer', 'Manager', 'Analyst', 'Consultant', 'Specialist'][Math.floor(Math.random() * 5)],
-        languagesKnown: ['English', 'Hindi', 'Regional'][Math.floor(Math.random() * 3)],
-        siblings: Math.floor(1 + Math.random() * 3).toString(),
-        caste: ['General', 'OBC', 'SC', 'ST'][Math.floor(Math.random() * 4)],
-        religion: ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Jain', 'Buddhist', 'Other'][Math.floor(Math.random() * 7)],
+        company: `${city} ${randomElement(['Tech', 'Solutions', 'Enterprises', 'Industries', 'Group'])}`,
+        designation: randomElement(['Software Engineer', 'Manager', 'Analyst', 'Consultant', 'Specialist']),
+        languages: ['English', 'Hindi'],
+        siblings: Math.floor(1 + Math.random() * 3),
+        caste: randomElement(castes),
+        religion: randomElement(religions),
         wantKids: randomElement(yesNoMaybe),
         openToRelocate: randomElement(yesNoMaybe),
         openToPets: randomElement(yesNoMaybe),
-        status: 'Active',
+        statusTag: 'Active',
+        isDummy,
       });
+    };
 
-      customers.push(customer);
+    // 5 male non-dummy
+    for (let i = 0; i < 5; i++) {
+      customers.push(generateCustomer('Male', false));
+    }
+    // 5 female non-dummy
+    for (let i = 0; i < 5; i++) {
+      customers.push(generateCustomer('Female', false));
+    }
+    // 50 male dummy
+    for (let i = 0; i < 50; i++) {
+      customers.push(generateCustomer('Male', true));
+    }
+    // 50 female dummy
+    for (let i = 0; i < 50; i++) {
+      customers.push(generateCustomer('Female', true));
     }
 
     await Customer.insertMany(customers);

@@ -1,56 +1,30 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ICustomer } from '../models/Customer';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-export const getAIScoreAndExplanation = async (
-  customer: ICustomer,
-  potentialMatch: ICustomer
-): Promise<{ score: number; explanation: string }> => {
+export const generateMatchScoreAndExplanation = async (customer: ICustomer, match: ICustomer) => {
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-  const prompt = `
-    You are a matchmaking AI. Your task is to evaluate the compatibility between two profiles.
-    Provide a compatibility score from 0 to 100 and a brief explanation for your reasoning.
+  let prompt = `Evaluate compatibility between Customer A and Potential Match B. Return a score (0-100) and a short explanation.\n\nCustomer A: ${JSON.stringify(customer)}\nPotential Match B: ${JSON.stringify(match)}\n`;
 
-    Profile 1 (Customer):
-    - Gender: ${customer.gender}
-    - Age: ${new Date().getFullYear() - new Date(customer.dateOfBirth).getFullYear()}
-    - Income: ${customer.income}
-    - Religion: ${customer.religion}
-    - Caste: ${customer.caste}
-    - Marital Status: ${customer.maritalStatus}
-    - Want Kids: ${customer.wantKids}
-    - Open to Relocate: ${customer.openToRelocate}
-
-    Profile 2 (Potential Match):
-    - Gender: ${potentialMatch.gender}
-    - Age: ${new Date().getFullYear() - new Date(potentialMatch.dateOfBirth).getFullYear()}
-    - Income: ${potentialMatch.income}
-    - Religion: ${potentialMatch.religion}
-    - Caste: ${potentialMatch.caste}
-    - Marital Status: ${potentialMatch.maritalStatus}
-    - Want Kids: ${potentialMatch.wantKids}
-    - Open to Relocate: ${potentialMatch.openToRelocate}
-
-    Based on the provided details, what is the compatibility score and explanation?
-    Return the response in JSON format with "score" and "explanation" keys.
-  `;
-
-  try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = await response.text();
-    const parsed = JSON.parse(text);
-    return {
-      score: parsed.score,
-      explanation: parsed.explanation,
-    };
-  } catch (error) {
-    console.error('Error with Gemini API:', error);
-    return {
-      score: 50,
-      explanation: 'Could not generate AI score due to an error.',
-    };
+  if (customer.gender === 'Male') {
+    prompt += 'For males: Prioritize women who are younger, earn less, shorter, and have matching views on children.';
+  } else {
+    prompt += 'For females: Prioritize compatibility on profession, values, relocation preferences, pets, and languages.';
   }
+
+  const result = await model.generateContent(prompt);
+  const response = result.response.text();
+  const [scoreStr, explanation] = response.split('\n'); // Assume format: score\nexplanation
+  const score = parseInt(scoreStr.trim(), 10) || 50;
+
+  return { score, explanation: explanation.trim() };
+};
+
+export const generateIntro = async (customer: ICustomer, match: ICustomer) => {
+  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  const prompt = `Generate a short, personalized email intro for introducing ${match.firstName} to ${customer.firstName}. Keep it under 100 words.`;
+  const result = await model.generateContent(prompt);
+  return result.response.text();
 };

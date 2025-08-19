@@ -1,179 +1,47 @@
-# TDC Matchmaker Dashboard
+# Matchmaker Dashboard MVP
 
-A modern, AI-powered matchmaking dashboard built with React, TypeScript, Node.js, Express, and MongoDB.
+This is an internal tool for TDC matchmakers to manage clients, view profiles, assign matches, and record notes. Built as an MVP with React frontend and Node.js backend.
 
-## Project Structure
 
-```
-matchmaker-dashboard/
-├── client/                          # Frontend (Vite + React + TypeScript)
-│   ├── public/                      # Static assets
-│   │   └── vite.svg
-│   ├── src/
-│   │   ├── components/              # Reusable UI components
-│   │   │   ├── common/              # Common components used across the app
-│   │   │   │   └── PageHeader.tsx
-│   │   │   ├── customers/           # Customer-related components
-│   │   │   │   ├── CustomerList.tsx
-│   │   │   │   └── CustomerStatusChip.tsx
-│   │   │   └── dashboard/           # Dashboard-specific components
-│   │   │       ├── ActivityFeed.tsx
-│   │   │       ├── MatchSuccessRate.tsx
-│   │   │       └── RecentMatches.tsx
-│   │   ├── contexts/                # React contexts
-│   │   │   └── AuthContext.tsx
-│   │   ├── pages/                   # Page components
-│   │   │   ├── Dashboard.tsx
-│   │   │   ├── CustomerList.tsx
-│   │   │   ├── CustomerDetail.tsx
-│   │   │   └── ...
-│   │   ├── services/                # API services
-│   │   │   └── api.ts
-│   │   ├── types/                   # TypeScript type definitions
-│   │   │   └── index.ts
-│   │   ├── utils/                   # Utility functions
-│   │   ├── App.tsx                  # Main App component
-│   │   ├── main.tsx                 # App entry point
-│   │   └── vite-env.d.ts
-│   ├── .env                         # Environment variables
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── tsconfig.node.json
-│   ├── vite.config.ts
-│   └── index.html
-├── server/                          # Backend (Node.js + Express + TypeScript)
-│   ├── src/
-│   │   ├── config/                 # Configuration files
-│   │   ├── controllers/            # Route controllers
-│   │   │   ├── authController.ts
-│   │   │   ├── customerController.ts
-│   │   │   └── matchController.ts
-│   │   ├── middleware/             # Express middleware
-│   │   ├── models/                 # Database models
-│   │   │   ├── User.ts
-│   │   │   ├── Customer.ts
-│   │   │   └── Match.ts
-│   │   ├── routes/                 # API routes
-│   │   │   ├── auth.ts
-│   │   │   ├── customers.ts
-│   │   │   └── matches.ts
-│   │   ├── services/               # Business logic
-│   │   ├── utils/                  # Utility functions
-│   │   └── server.ts               # Server entry point
-│   ├── .env                        # Environment variables
-│   ├── package.json
-│   └── tsconfig.json
-└── README.md
-```
+## Setup (Local)
+1. **Backend**:
+   - `cd server`
+   - `npm install`
+   - Create `.env` with `MONGO_URI=mongodb://localhost:27017/matchmaker`, `GEMINI_API_KEY=your-key`, `JWT_SECRET=secret`, `FRONTEND_URL=http://localhost:5173`
+   - Run `npm run seed` to populate DB
+   - `npm run dev` to start server (port 5000)
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v16 or later)
-- npm or yarn
-- MongoDB (local or Atlas)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/shreyanshtri26/matchmaker-dashboard.git
-   cd matchmaker-dashboard
-   ```
-
-2. **Set up the backend**
-   ```bash
-   cd server
-   npm install
-   cp .env.example .env
-   # Update .env with your configuration
-   npm run dev
-   ```
-
-3. **Set up the frontend**
-   ```bash
-   cd ../client
-   npm install
-   cp .env.example .env
-   # Update .env with your API URL
-   npm run dev
-   ```
-
-4. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:5000
-
-## Development
-
-### Available Scripts
-
-**Client:**
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Check TypeScript types
-
-**Server:**
-- `npm run dev` - Start development server with hot-reload
-- `npm run build` - Compile TypeScript to JavaScript
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
-
-## Features
-
-- Modern React with TypeScript
-- Responsive UI with Tailwind CSS
-- JWT Authentication
-- Role-based access control
-- Real-time updates
-- AI-powered matchmaking
-- Data visualization
-- Form validation
-- Error handling
-- Unit and integration tests
-
-## Environment Variables
-
-**Client (`.env`)**
-```env
-VITE_API_URL=http://localhost:5000/api
-VITE_GOOGLE_CLIENT_ID=your-google-client-id
-```
-
-**Server (`.env`)**
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/matchmaker
-JWT_SECRET=your-jwt-secret
-GOOGLE_API_KEY=your-google-api-key
-```
-
-## Testing
-
-Run tests for both client and server:
-
-```bash
-# Client tests
-cd client
-npm test
-
-# Server tests
-cd ../server
-npm test
-```
+2. **Frontend**:
+   - `cd client`
+   - `npm install`
+   - Create `.env` with `VITE_API_BASE=http://localhost:5000/api`
+   - `npm run dev` to start (port 5173)
 
 ## Deployment
+### Backend on Render
+1. Create a new Web Service on Render, connect GitHub repo (server folder).
+2. Set Runtime: Node.
+3. Build Command: `npm install && npm run build`
+4. Start Command: `npm start`
+5. Add Env Vars: `MONGO_URI` (use MongoDB Atlas), `GEMINI_API_KEY`, `JWT_SECRET`, `FRONTEND_URL` (your Vercel URL).
+6. Deploy. Note: Run seed locally or add a one-time endpoint.
 
-1. Build the application:
-   ```bash
-   # Client
-   cd client
-   npm run build
+### Frontend on Vercel
+1. Create a new project on Vercel, import GitHub repo (client folder).
+2. Vercel auto-detects Vite/React.
+3. Add Env Var: `VITE_API_BASE=https://your-render-app.onrender.com/api`
+4. Deploy.
 
-   # Server
-   cd ../server
-   npm run build
-   ```
 
-2. Deploy the built files to your hosting service (e.g., Vercel, Heroku, AWS).
+
+## Tech Choices
+The frontend uses Vite + React + TypeScript for fast development and type safety, with Tailwind CSS for styling (custom colors: Primary #dea75e for actions, Secondary #242e30 for text, Background #fff5e1 for base). Reusable UI components (Button, Input, Select) ensure DRY code. The backend employs Node.js + Express + TypeScript for robust API handling, MongoDB for flexible data storage, and Google Gemini for AI enhancements. Authentication uses bcrypt for hashing and JWT for tokens. Seed script populates realistic data.
+
+## Matching Logic
+Matching is gender-specific and scalable. For male customers, prioritize women who are younger (age < customer's), earn less (income < customer's), shorter (height < customer's), and match on wanting kids. For female customers, focus on compatibility in profession (similar designation/company), values (matching relocation, pets, languages), and other factors like marital status. Gemini AI dynamically evaluates via prompts for scores/explanations, filtering matches above 50 and sorting by score.
+
+## How AI is Used
+Google Gemini enhances the experience in two ways: (1) Scoring/ranking matches with explanations (e.g., "High Potential Match due to aligned relocation and professional synergy" based on gender-specific logic), using LLM-based natural language reasoning for profile fit; (2) Generating short, personalized intros for emails/introductions.
+
+## Assumptions Made
+Assumed all customers are assigned to the logged-in matchmaker (no multi-user support). Dummy profiles are mixed genders for the pool, filtered by opposite gender. Auth is basic (username/password with JWT); no password reset. Notes are mocked with alerts; real emails are mocked. Seeding runs separately; data is Indian-centric for realism. For deployment, MongoDB is cloud-hosted (e.g., Atlas).

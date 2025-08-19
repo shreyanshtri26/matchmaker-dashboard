@@ -1,47 +1,28 @@
 {
-    "name": "matchmaker-server",
-    "version": "1.0.0",
-    "description": "TDC Matchmaker Dashboard Backend API",
-    "main": "dist/server.js",
-    "scripts": {
-      "start": "node dist/server.js",
-      "dev": "nodemon src/server.ts",
-      "build": "tsc",
-      "seed": "ts-node src/utils/seedData.ts"
-    },
-    "keywords": [
-      "matchmaker",
-      "dating",
-      "api",
-      "nodejs",
-      "express",
-      "mongodb"
-    ],
-    "author": "TDC Team",
-    "license": "ISC",
-    "dependencies": {
-      "express": "^4.18.2",
-      "mongoose": "^7.5.0",
-      "cors": "^2.8.5",
-      "helmet": "^7.0.0",
-      "dotenv": "^16.3.1",
-      "bcryptjs": "^2.4.3",
-      "jsonwebtoken": "^9.0.2",
-      "joi": "^17.9.2",
-      "express-rate-limit": "^6.10.0",
-      "@google/generative-ai": "^0.2.1",
-      "nodemailer": "^6.9.4",
-      "winston": "^3.10.0"
-    },
-    "devDependencies": {
-      "@types/express": "^4.17.17",
-      "@types/cors": "^2.8.13",
-      "@types/bcryptjs": "^2.4.2",
-      "@types/jsonwebtoken": "^9.0.2",
-      "@types/nodemailer": "^6.4.9",
-      "@types/node": "^20.5.0",
-      "typescript": "^5.1.6",
-      "nodemon": "^3.0.1",
-      "ts-node": "^10.9.1"
-    }
+  "name": "server",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "seed": "ts-node src/scripts/seed.ts"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.1.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.16",
+    "@types/jsonwebtoken": "^9.0.0",
+    "@types/node": "^18.15.0",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
   }
+}
