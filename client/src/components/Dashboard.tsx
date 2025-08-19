@@ -13,26 +13,40 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold text-center sm:text-left">
-            MatchMaker Dashboard
-          </h1>
-          <Button 
-            variant="primary" 
-            onClick={handleLogout}
-            className="w-full sm:w-auto"
-          >
-            Logout
-          </Button>
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900">MatchMaker Dashboard</h1>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <div className="text-sm text-gray-600">
+                Welcome back! 👋
+              </div>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleLogout}
+                className="hover:bg-red-50 hover:text-red-700 hover:border-red-200"
+              >
+                Logout
+              </Button>
+            </div>
+          </div>
         </div>
+      </header>
 
-        {/* Customer List */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <CustomerList />
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Customer Management</h2>
+          <p className="text-gray-600">Search, sort, and manage your customer profiles</p>
         </div>
-      </div>
+        
+        <CustomerList />
+      </main>
     </div>
   );
 };
