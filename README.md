@@ -78,7 +78,7 @@ matchmaker-dashboard/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/matchmaker-dashboard.git
+   git clone https://github.com/shreyanshtri26/matchmaker-dashboard.git
    cd matchmaker-dashboard
    ```
 
