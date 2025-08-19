@@ -123,7 +123,7 @@ matchmaker-dashboard/
 ## Features
 
 - Modern React with TypeScript
-- Responsive UI with Material-UI
+- Responsive UI with Tailwind CSS
 - JWT Authentication
 - Role-based access control
 - Real-time updates
@@ -177,4 +177,3 @@ npm test
    ```
 
 2. Deploy the built files to your hosting service (e.g., Vercel, Heroku, AWS).
-
