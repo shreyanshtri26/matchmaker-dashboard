@@ -15,14 +15,13 @@ const CustomerList: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const navigate = useNavigate();
 
+  // Updated sort options - only the requested fields
   const sortOptions = [
     { value: 'name', label: 'Name' },
     { value: 'age', label: 'Age' },
     { value: 'city', label: 'City' },
-    { value: 'income', label: 'Income' },
-    { value: 'maritalStatus', label: 'Marital Status' },
-    { value: 'statusTag', label: 'Status' },
-    { value: 'gender', label: 'Gender' }
+    { value: 'gender', label: 'Gender' },
+    { value: 'maritalStatus', label: 'Marital Status' }
   ];
 
   useEffect(() => {
@@ -59,7 +58,7 @@ const CustomerList: React.FC = () => {
   const processedCustomers = useMemo(() => {
     let result = customers;
 
-    // Apply search filter
+    // Apply search filter - search by name only
     if (searchTerm.trim()) {
       result = result.filter(customer => 
         `${customer.firstName} ${customer.lastName}`
@@ -68,7 +67,7 @@ const CustomerList: React.FC = () => {
       );
     }
 
-    // Apply sorting
+    // Apply sorting - only for the allowed fields
     result = [...result].sort((a, b) => {
       let aValue: any, bValue: any;
 
@@ -78,13 +77,24 @@ const CustomerList: React.FC = () => {
           bValue = `${b.firstName} ${b.lastName}`;
           break;
         case 'age':
-        case 'income':
-          aValue = a[sortBy as keyof Customer];
-          bValue = b[sortBy as keyof Customer];
+          aValue = a.age;
+          bValue = b.age;
+          break;
+        case 'city':
+          aValue = a.city || '';
+          bValue = b.city || '';
+          break;
+        case 'gender':
+          aValue = a.gender || '';
+          bValue = b.gender || '';
+          break;
+        case 'maritalStatus':
+          aValue = a.maritalStatus || '';
+          bValue = b.maritalStatus || '';
           break;
         default:
-          aValue = a[sortBy as keyof Customer] || '';
-          bValue = b[sortBy as keyof Customer] || '';
+          aValue = `${a.firstName} ${a.lastName}`;
+          bValue = `${b.firstName} ${b.lastName}`;
       }
 
       if (typeof aValue === 'number' && typeof bValue === 'number') {
@@ -129,7 +139,7 @@ const CustomerList: React.FC = () => {
       {/* Search and Filter Controls */}
       <div className="bg-gray-50 rounded-lg p-4 space-y-4">
         <div className="flex flex-col lg:flex-row gap-4">
-          {/* Search Bar */}
+          {/* Search Bar - Name only */}
           <div className="flex-1 relative">
             <div className="relative">
               <Input
@@ -154,6 +164,9 @@ const CustomerList: React.FC = () => {
 
           {/* Sort Controls */}
           <div className="flex gap-2 items-center">
+            <div className="text-sm text-gray-600 font-medium whitespace-nowrap">
+              Sort by:
+            </div>
             <Select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -243,16 +256,9 @@ const CustomerList: React.FC = () => {
                   <Button
                     size="sm"
                     onClick={() => navigate(`/customer/${customer._id}`)}
-                    className="mr-2"
+                    className="mr-2 hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition-colors duration-200"
                   >
                     View Details
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => navigate(`/matches/${customer._id}`)}
-                  >
-                    Find Matches
                   </Button>
                 </td>
               </tr>
@@ -285,17 +291,9 @@ const CustomerList: React.FC = () => {
               <Button
                 size="sm"
                 onClick={() => navigate(`/customer/${customer._id}`)}
-                className="flex-1"
+                className="flex-1 hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition-colors duration-200"
               >
                 View Details
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => navigate(`/matches/${customer._id}`)}
-                className="flex-1"
-              >
-                Find Matches
               </Button>
             </div>
           </div>

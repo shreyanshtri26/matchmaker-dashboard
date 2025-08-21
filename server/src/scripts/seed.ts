@@ -108,19 +108,19 @@ const seedData = async () => {
     };
 
     // 5 male non-dummy
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 55; i++) {
       customers.push(generateCustomer('Male', false));
     }
     // 5 female non-dummy
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 55; i++) {
       customers.push(generateCustomer('Female', false));
     }
     // 50 male dummy
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 80; i++) {
       customers.push(generateCustomer('Male', true));
     }
     // 50 female dummy
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 80; i++) {
       customers.push(generateCustomer('Female', true));
     }
 
